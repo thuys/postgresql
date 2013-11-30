@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# function to "declare" the database that exist
+if [[ -n $(postgresql-check-db-dir /var/lib/pgsql/data) ]]; then
+	echo "Need to initialize"
+    chkconfig postgresql on
+	 /usr/bin/postgresql-setup initdb
+else
+    echo "already init"
+fi

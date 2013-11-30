@@ -1,0 +1,12 @@
+[Unit]
+Description=Postgres database create script
+
+[Service]
+Type=simple
+User=root
+
+ExecStart=/usr/bin/postgresql_create
+
+[Install]
+WantedBy=multi-user.target
+

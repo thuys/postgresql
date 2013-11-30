@@ -1,0 +1,12 @@
+[Unit]
+Description=Pgpool node
+
+[Service]
+Type=simple
+User=root
+
+ExecStart=/usr/bin/postgresql_init
+
+[Install]
+WantedBy=multi-user.target
+
