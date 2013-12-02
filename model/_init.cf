@@ -70,6 +70,8 @@ implementation pgpoolMainImpl:
     pkg = std::Package( host = jpst, name = "postgresql-pgpool-II", state = "installed")
     configFile = std::ConfigFile(host = host, path = "/etc/pgpool-II/pgpool.conf", requires = pkg, content = file("postgresql/pgpool.conf.tmpl"))
     
+    pcpFile = std::ConfigFile(host = host, path = "/etc/pgpool-II/pcp.conf", requires = pkg, content = file("postgresql/pcp.conf.tmpl"))
+    
     svc = std::Service(host = host, name = "pgpool", state = "running", onboot = true)
-    svc.requires = [pkg, configFile]
+    svc.requires = [pkg, configFile, pcpFile]
 end

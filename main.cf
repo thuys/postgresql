@@ -1,0 +1,8 @@
+vmPg1 = ip::Host(name = "vm1", os = "fedora-18", ip = "172.16.32.29")
+vmPg2 = ip::Host(name = "vm2", os = "fedora-18", ip = "172.16.32.30")
+vmPg3 = ip::Host(name = "vm3", os = "fedora-18", ip = "172.16.32.20")
+
+pgNode = postgresql::PgpoolNode(host = vmPg2)
+pgNode = postgresql::PgpoolNode(host = vmPg3)
+
+pgMaster = postgresql::pgpoolMain(host = vmPg1)
