@@ -5,7 +5,7 @@ Description=Pgpool node
 Type=simple
 User=root
 
-ExecStart=/usr/bin/postgresql_init
+ExecStart=/usr/bin/pgpool_node_create
 
 [Install]
 WantedBy=multi-user.target

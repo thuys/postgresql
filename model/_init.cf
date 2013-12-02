@@ -24,6 +24,7 @@ Pgpool pgPool [1] -- [0:1] PgpoolMain main"""
 
 implement Postgres using postgresImpl
 
+implement Pgpool using postgresImpl
 implement Pgpool using pgpoolImpl
 
 implement PgpoolNode using pgpoolNodeImpl
