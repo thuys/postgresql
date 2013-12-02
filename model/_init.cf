@@ -28,6 +28,8 @@ implement Pgpool using postgresImpl
 
 implement PgpoolNode using postgresImpl
 implement PgpoolNode using pgpoolNodeImpl
+
+implement PgpoolMain using postgresImpl
 implement PgpoolMain using pgpoolMainImpl
 
 
@@ -35,7 +37,7 @@ implementation postgresImpl:
     pkg = std::Package(host = host, name = "postgresql-server", state = "installed")
     
     unit_file = std::File(host = host, path = "/lib/systemd/system/postgresql_create.service", owner = "root",
-        group = "root", mode = 644, requires = script_file, content = file("postgresql/postgresql_create.service"))
+        group = "root", mode = 755, requires = script_file, content = file("postgresql/postgresql_create.service"))
 
     script_file = std::File(host = host, path = "/usr/bin/postgresql_create", owner = "root", group = "root",
         mode = 755, content = file("postgresql/postgresql_create"))
