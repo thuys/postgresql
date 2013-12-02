@@ -51,7 +51,7 @@ pcp_socket_dir = '/var/run/postgresql'
 
 # - Backend Connection Settings -
 {% for node in pgpoolNodes %}
-backend_hostname{{ loop.index0}} = 'host1'
+backend_hostname{{ loop.index0}} = '{{ node.host.ip}}'
                                    # Host name or IP address to connect to for backend 0
 backend_port{{ loop.index0}} = {{ node.port}}
                                    # Port number for backend 0
@@ -63,22 +63,6 @@ backend_flag{{ loop.index0}} = 'ALLOW_TO_FAILOVER'
                                    # Controls various backend behavior
                                    # ALLOW_TO_FAILOVER or DISALLOW_TO_FAILOVER
 {% endfor %}
-#backend_hostname0 = 'host1'
-                                   # Host name or IP address to connect to for backend 0
-#backend_port0 = 5432
-                                   # Port number for backend 0
-#backend_weight0 = 1
-                                   # Weight for backend 0 (only in load balancing mode)
-#backend_data_directory0 = '/data'
-                                   # Data directory for backend 0
-#backend_flag0 = 'ALLOW_TO_FAILOVER'
-                                   # Controls various backend behavior
-                                   # ALLOW_TO_FAILOVER or DISALLOW_TO_FAILOVER
-#backend_hostname1 = 'host2'
-#backend_port1 = 5433
-#backend_weight1 = 1
-#backend_data_directory1 = '/data1'
-#backend_flag1 = 'ALLOW_TO_FAILOVER'
 
 # - Authentication -
 
