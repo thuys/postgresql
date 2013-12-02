@@ -63,9 +63,9 @@ end
 
 implementation pgpoolMainImpl:
     pkgMain = std::Package( host = host, name = "postgresql-pgpool-II", state = "installed")
-    configFileMain = std::ConfigFile(host = host, path = "/etc/pgpool-II/pgpool.conf", requires = pkg, content = template("postgresql/pgpool.conf.tmpl"))
+    configFileMain = std::ConfigFile(host = host, path = "/etc/pgpool-II/pgpool.conf", requires = pkgMain, content = template("postgresql/pgpool.conf.tmpl"))
     
-    pcpFileMain = std::ConfigFile(host = host, path = "/etc/pgpool-II/pcp.conf", requires = pkg, content = template("postgresql/pcp.conf.tmpl"))
+    pcpFileMain = std::ConfigFile(host = host, path = "/etc/pgpool-II/pcp.conf", requires = pkgMain, content = template("postgresql/pcp.conf.tmpl"))
     
     svcMain = std::Service(host = host, name = "pgpool", state = "running", onboot = true)
     svc.requires = [pkgMain, configFileMain, pcpFileMain]
