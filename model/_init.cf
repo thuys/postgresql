@@ -4,7 +4,7 @@ entity Postgres extends ip::services::Server:
     string socketdir = "/var/run/postgresql"
 end
 
-entity PgpoolNode extends Postgres
+entity PgpoolNode extends Postgres:
     """The node for a distributed one"""
 end
 
@@ -13,7 +13,7 @@ entity PgpoolMain extends ip::services::Server:
     string port = "5432"
 end
 
-entity Pgpool
+entity Pgpool:
     """Has the pgpool in """
 end
 
