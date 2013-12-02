@@ -40,8 +40,8 @@ implementation postgresImpl:
     createService = std::Service(host = host, name = "postgresql_create", state = "running", onboot = true,
         requires = [pkg, createServiceFile, script_file])
     
-    configFile = std::ConfigFile(host = host, path = "/var/lib/lib/systemd/system/postgresql.service", requires = createService, content = template("postgresql/postgresql.service.tmpl"), reload = true)
-    serviceFile = std::ConfigFile(host = host, path = "/var/lib/pgsql/data/postgresql.conf", requires = createService, content = template("postgresql/postgresql.conf.tmpl"), reload = true)
+    serviceFile = std::ConfigFile(host = host, path = "/lib/systemd/system/postgresql.service", requires = createService, content = template("postgresql/postgresql.service.tmpl"), reload = true)
+    configFile = std::ConfigFile(host = host, path = "/var/lib/pgsql/data/postgresql.conf", requires = createService, content = template("postgresql/postgresql.conf.tmpl"), reload = true)
 
     svc = std::Service(host = host, name = "postgresql", state = "running", onboot = true)
     svc.requires = [createService, configFile, serviceFile]
