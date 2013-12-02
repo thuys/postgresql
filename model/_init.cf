@@ -37,7 +37,7 @@ implementation postgresImpl:
         group = "root", mode = 644, requires = script_file, content = file("postgresql/postgresql_create_db.service"))
 
     script_file = std::File(host = host, path = "/usr/bin/postgresql_create", owner = "root", group = "root",
-        mode = 755, content = file("mysql/mysql_create_db"))
+        mode = 755, content = file("postgresql/postgresql_create"))
     
     svc_file = std::Service(host = host, name = "postgresql_create", state = "running", onboot = true,
         requires = [svc, unit_file, script_file])
@@ -55,10 +55,10 @@ end
 implementation pgpoolNodeImpl:    
     pkg = std::Package( host = host, name = "postgresql-pgpool-II", state = "installed")
     unit_file = std::File(host = host, path = "/lib/systemd/system/pgpool_node_create.service", owner = "root",
-        group = "root", mode = 755, requires = script_file, content = file("mysql/pgpool_node_create.service"))
+        group = "root", mode = 755, requires = script_file, content = file("postgresql/pgpool_node_create.service"))
 
     script_file = std::File(host = host, path = "/usr/bin/pgpool_node_create", owner = "root", group = "root",
-        mode = 755, content = file("mysql/pgpool_node_create"))
+        mode = 755, content = file("postgresql/pgpool_node_create"))
     
     svc_file = std::Service(host = host, name = "pgpool_node_create", state = "running", onboot = true,
         requires = [pkg, unit_file, script_file])
