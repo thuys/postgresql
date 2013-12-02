@@ -1,0 +1,51 @@
+#!/bin/sh
+ 
+username=root
+dbname=root
+ 
+# sql to check whether given user exist
+sqlRole1="select count(1) from pg_catalog.pg_roles where rolname  = '$username'"
+
+# sql to create user (add other params as needed)
+sqlRole2="CREATE ROLE $username LOGIN SUPERUSER INHERIT CREATEDB CREATEROLE REPLICATION;"
+ 
+# depending on how PATH is set psql may require a fully qualified path
+cmd="echo \"$sqlRole1\" | su postgres --command psql"
+ 
+user_exists=`eval $cmd`
+echo "$user_exists"
+
+if [[ "$user_exists" == *"     0"* ]] ; then
+   # create the database, discard the output
+   cmd="echo \"$sqlRole2\"| su postgres --command psql"
+   eval $cmd
+   echo "$cmd"
+fi
+ 
+# exit with success status
+
+# may check the args to see if dbname
+# was provided
+
+ 
+# sql to check whether given database exist
+sql1="select count(1) from pg_catalog.pg_database where datname = '$dbname'"
+ 
+# sql to create database (add other params as needed)
+sql2="create database $dbname WITH OWNER = root"
+ 
+# depending on how PATH is set psql may require a fully qualified path
+cmd="echo \"$sql1\" | su postgres --command psql"
+ 
+db_exists=`eval $cmd`
+echo "$db_exists"
+
+if [[ "$db_exists" == *"     0"* ]] ; then
+   # create the database, discard the output
+   cmd="echo \"$sql2\"| su postgres --command psql"
+   eval $cmd
+   echo "$cmd"
+fi
+ 
+# exit with success status
+exit 0

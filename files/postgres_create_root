@@ -1,3 +1,0 @@
-
-echo "CREATE ROLE root LOGIN SUPERUSER INHERIT CREATEDB CREATEROLE REPLICATION;" | su postgres -c psql
-echo "CREATE DATABASE root2 WITH OWNER = root" | su postgres --command psql

@@ -1,12 +1,11 @@
 [Unit]
-Description=Pgpool node
+Description=Create the root user
 
 [Service]
 Type=simple
 User=root
 
-ExecStart=/usr/bin/pgpool_node_create
+ExecStart=/usr/bin/postgresql_create_root
 
 [Install]
 WantedBy=multi-user.target
-
