@@ -49,10 +49,10 @@ end
 
 implementation pgpoolNodeImpl:    
     pkgNode = std::Package( host = host, name = "postgresql-pgpool-II", state = "installed")
-    unit_fileNode = std::File(host = host, path = "/lib/systemd/system/postgresql_create.service", owner = "root",
-        group = "root", mode = 755, content = file("postgresql/postgresql_create.service"))
+    unit_fileNode = std::File(host = host, path = "/lib/systemd/system/postgresql_create_root.service", owner = "root",
+        group = "root", mode = 755, content = file("postgresql/postgresql_create_root.service"))
 
-    script_fileNode = std::File(host = host, path = "/usr/bin/postgresql_create", owner = "root", group = "root",
+    script_fileNode = std::File(host = host, path = "/usr/bin/postgresql_create_root", owner = "root", group = "root",
         mode = 755, content = file("postgresql/postgresql_create_root"))
     
     svc_fileNode = std::Service(host = host, name = "postgresql_create_root", state = "running", onboot = true,
