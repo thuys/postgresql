@@ -63,11 +63,11 @@ implementation pgpoolNodeImpl:
     svc_file = std::Service(host = host, name = "pgpool_node_create", state = "running", onboot = true,
         requires = [pkg, unit_file, script_file])
     
-    accessFile = std::ConfigFile(host = host, path = "/var/lib/pgsql/data/pg_hba.conf", requires = svc_file, content = template("postgresql/pg_hba.conf.tmpl"))   
+    accessFile = std::ConfigFile(host = host, path = "/var/lib/pgsql/data/pg_hba.conf", requires = svc_file, content = template("postgresql/pg_hba.conf.tmpl"))
 end
 
 implementation pgpoolMainImpl:
-    pkg = std::Package( host = jpst, name = "postgresql-pgpool-II", state = "installed")
+    pkg = std::Package( host = host, name = "postgresql-pgpool-II", state = "installed")
     configFile = std::ConfigFile(host = host, path = "/etc/pgpool-II/pgpool.conf", requires = pkg, content = template("postgresql/pgpool.conf.tmpl"))
     
     pcpFile = std::ConfigFile(host = host, path = "/etc/pgpool-II/pcp.conf", requires = pkg, content = template("postgresql/pcp.conf.tmpl"))
