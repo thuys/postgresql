@@ -13,9 +13,6 @@ entity PgpoolMain extends ip::services::Server:
     string port = "5432"
 end
 
-entity Pgpool:
-    """Has the pgpool in """
-end
 
 PgpoolMain pgpoolMain [1] -- [1:] PgpoolNode pgpoolNodes
 
@@ -23,8 +20,6 @@ PgpoolMain pgpoolMain [1] -- [1:] PgpoolNode pgpoolNodes
 Pgpool pgPool [1] -- [0:1] PgpoolMain main"""
 
 implement Postgres using postgresImpl
-
-implement Pgpool using postgresImpl
 
 implement PgpoolNode using postgresImpl
 implement PgpoolNode using pgpoolNodeImpl
@@ -45,14 +40,10 @@ implementation postgresImpl:
     svc_file = std::Service(host = host, name = "postgresql_create", state = "running", onboot = true,
         requires = [svc, unit_file, script_file])
     
-    configFile = std::ConfigFile(host = host, path = "/var/lib/pgsql/data/postgresql.conf", requires = svc_file, content = template("postgresql/postgresql.conf.tmpl"), purge = true)
+    configFile = std::ConfigFile(host = host, path = "/var/lib/pgsql/data/postgresql.conf", requires = svc_file, content = template("postgresql/postgresql.conf.tmpl"), onboot = true)
         
     svc = std::Service(host = host, name = "postgresql", state = "running", onboot = true)
     svc.requires = [pkg, svc_file, configFile]
-end
-
-implementation pgpoolImpl:
-    pkg = std::Package( host = host, name = "postgresql-pgpool-II", state = "installed")
 end
 
 implementation pgpoolNodeImpl:    
