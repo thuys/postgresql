@@ -39,7 +39,7 @@ implementation postgresImpl:
         requires = [pkg, createServiceFile, script_file])
     
     serviceFile = std::ConfigFile(host = host, path = "/lib/systemd/system/postgresql.service", requires = createService, content = template("postgresql/postgresql.service.tmpl"), reload = true)
-    configFile = std::ConfigFile(host = host, path = "/var/lib/pgsql/data/postgresql.conf", requires = createService, content = template("postgresql/postgresql.conf.tmpl"), reload = true)
+    configFile = std::File(host = host, path = "/var/lib/pgsql/data/postgresql.conf", requires = createService, content = template("postgresql/postgresql.conf.tmpl"), reload = true, owner="postgres", group="postgres", mode = 755)
 
     svc = std::Service(host = host, name = "postgresql", state = "running", onboot = true)
     svc.requires = [createService, configFile, serviceFile]
@@ -57,7 +57,7 @@ implementation pgpoolNodeImpl:
         requires = [pkgNode, unit_fileNode, script_fileNode])
     svc_fileNode.requires = std::Service[host = host, name = "postgresql"]
     
-    accessFileNode = std::ConfigFile(host = host, path = "/var/lib/pgsql/data/pg_hba.conf", requires = svc_fileNode, content = template("postgresql/pg_hba.conf.tmpl"))
+    accessFileNode = std::File(host = host, path = "/var/lib/pgsql/data/pg_hba.conf", requires = svc_fileNode, content = template("postgresql/pg_hba.conf.tmpl"), owner="postgres", group="postgres", mode = 755)
     accessFileNode.requires = std::Service[host = host, name = "postgresql_create"]
 end
 
