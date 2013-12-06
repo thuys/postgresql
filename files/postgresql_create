@@ -6,6 +6,7 @@ if [[ -n $(postgresql-check-db-dir /var/lib/pgsql/data) ]]; then
 	rm -r -f /var/lib/pgsql/data
     chkconfig postgresql on
 	 /usr/bin/postgresql-setup initdb
+	 service restart postgresql
 else
     echo "already init"
 fi
