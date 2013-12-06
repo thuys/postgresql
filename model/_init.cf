@@ -55,6 +55,7 @@ implementation pgpoolNodeImpl:
     
     svc_fileNode = std::Service(host = host, name = "postgresql_create_root", state = "running", onboot = true,
         requires = [pkgNode, unit_fileNode, script_fileNode])
+    svc_fileNode.requires = std::Service[host = host, name = "postgresql"]
     
     accessFileNode = std::ConfigFile(host = host, path = "/var/lib/pgsql/data/pg_hba.conf", requires = svc_fileNode, content = template("postgresql/pg_hba.conf.tmpl"))
     accessFileNode.requires = std::Service[host = host, name = "postgresql_create"]
