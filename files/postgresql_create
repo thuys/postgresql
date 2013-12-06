@@ -8,7 +8,8 @@ if [[ -n $(postgresql-check-db-dir /var/lib/pgsql/data) ]]; then
 	/usr/bin/postgresql-setup initdb
 	if [[ -n $(postgresql-check-db-dir /var/lib/pgsql/data) ]]; then
 		if [[ "$#" == *"0"* ]];then
-			echo /usr/bin/postgresql_create 1 | at now + 1 min
+			sleep 1 min
+			/usr/bin/postgresql_create 1
 		fi
 	else
 		service restart postgresql
