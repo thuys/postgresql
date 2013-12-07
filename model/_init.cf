@@ -66,7 +66,8 @@ end
 
 implementation pgpoolMainImpl:
     pkg = std::Package(host = host, name = "postgresql-server", state = "installed")
-    pkgMain = std::Package( host = host, name = "postgresql-pgpool-II", state = "installed")
+    
+    pkgMain = std::Package( host = host, name = "postgresql-pgpool-II", state = "installed", requires=pkg)
     configFileMain = std::ConfigFile(host = host, path = "/etc/pgpool-II/pgpool.conf", 
                                      requires = pkgMain, content = template("postgresql/pgpool.conf.tmpl"), reload = true)
     
