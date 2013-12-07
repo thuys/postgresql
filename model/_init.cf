@@ -44,7 +44,7 @@ implementation postgresImpl:
 
     svc = std::Service(host = host, name = "postgresql", state = "running", onboot = true)
     svc.requires = [createService, configFile, serviceFile]
-    svc.requires = std::File[host = host, path = "/var/lib/pgsql/data/pg_hba.conf"];
+    svc.requires = std::File[host = host, path = "/var/lib/pgsql/data/pg_hba.conf"]
 end
 
 implementation pgpoolNodeImpl:    
