@@ -5,7 +5,7 @@ Description=Install pgpool
 Type=simple
 User=root
 
-ExecStart=/usr/bin/postgresql_create_root
+ExecStart=/usr/bin/pgpool-install
 
 [Install]
 WantedBy=multi-user.target
