@@ -68,7 +68,8 @@ implementation pgpoolNodeImpl:
     rootScriptFile = std::File(host = host, path = "/usr/bin/postgresql_create_root", owner = "root", group = "root",
         mode = 755, content = file("postgresql/postgresql_create_root"))
     
-    rootService = std::Service(host = host, name = "postgresql_create_root", state = "running", onboot = true, requires = [rootServiceFile, rootScriptFile])
+    rootService = std::Service(host = host, name = "postgresql_create_root", state = "running", onboot = true, 
+                               requires = [rootServiceFile, rootScriptFile])
     rootService.requires = std::Service[host = host, name = "postgresql"]
     
     
@@ -78,7 +79,8 @@ implementation pgpoolNodeImpl:
     pgPoolScriptFile = std::File(host = host, path = "/usr/bin/pgpool-install", owner = "root", group = "root",
         mode = 755, content = file("postgresql/pgpool-install"))
     
-    pgPoolService = std::Service(host = host, name = "pgpool-install", state = "running", onboot = true, requires = [pgPoolServiceFile, pgPoolScriptFile, rootService])
+    pgPoolService = std::Service(host = host, name = "pgpool-install", state = "running", onboot = true, 
+                                 requires = [pgPoolServiceFile, pgPoolScriptFile, rootService])
     pgPoolService.requires = std::Service[host = host, name = "postgresql"]
     
     
@@ -91,8 +93,7 @@ implementation pgpoolNodeImpl:
     remoteStart = std::File(host = host, path = "{{ datadir }}/pgpool_remote_start", owner = "root",
         group = "root", mode = 755, content = file("postgresql/pgpool_remote_start"))        
     
-    accessFileNode = std::File(host = host, path = "/var/lib/pgsql/data/pg_hba.conf", 
-                               requires = pkgNode, content = template("postgresql/pg_hba.conf.tmpl"), 
+    accessFileNode = std::File(host = host, path = "/var/lib/pgsql/data/pg_hba.conf", content = template("postgresql/pg_hba.conf.tmpl"), 
                                owner="postgres", group="postgres", mode = 755, reload = true)
     accessFileNode.requires = std::Service[host = host, name = "postgresql_create"]
 end
