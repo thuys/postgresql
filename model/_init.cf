@@ -62,15 +62,34 @@ implementation pgpoolNodeImpl:
     postgresql-devel = std::Package( host = host, name = "postgresql-devel", state = "installed")
     make = std::Package( host = host, name = "make", state = "installed")
     
-    unit_fileNode = std::File(host = host, path = "/lib/systemd/system/postgresql_create_root.service", owner = "root",
+    rootServiceFile = std::File(host = host, path = "/lib/systemd/system/postgresql_create_root.service", owner = "root",
         group = "root", mode = 755, content = file("postgresql/postgresql_create_root.service"))
 
-    script_fileNode = std::File(host = host, path = "/usr/bin/postgresql_create_root", owner = "root", group = "root",
+    rootScriptFile = std::File(host = host, path = "/usr/bin/postgresql_create_root", owner = "root", group = "root",
         mode = 755, content = file("postgresql/postgresql_create_root"))
     
-    svc_fileNode = std::Service(host = host, name = "postgresql_create_root", state = "running", onboot = true)
-    svc_fileNode.requires = std::Service[host = host, name = "postgresql"]
+    rootService = std::Service(host = host, name = "postgresql_create_root", state = "running", onboot = true, requires = [rootServiceFile, rootScriptFile])
+    rootService.requires = std::Service[host = host, name = "postgresql"]
     
+    
+    pgPoolServiceFile = std::File(host = host, path = "/lib/systemd/system/pgpool-install.service", owner = "root",
+        group = "root", mode = 755, content = file("postgresql/pgpool-install.service"))
+
+    pgPoolScriptFile = std::File(host = host, path = "/usr/bin/pgpool-install", owner = "root", group = "root",
+        mode = 755, content = file("postgresql/pgpool-install"))
+    
+    pgPoolService = std::Service(host = host, name = "postgresql_create_root", state = "running", onboot = true, requires = [pgPoolServiceFile, pgPoolScriptFile, rootService])
+    pgPoolService.requires = std::Service[host = host, name = "postgresql"]
+    
+    
+    recoveryStage1 = std::File(host = host, path = "{{ datadir }}/copy-base-backup", owner = "root",
+        group = "root", mode = 755, content = file("postgresql/copy-base-backup"))
+
+    recoveryStage2 = std::File(host = host, path = "{{ datadir }}/pgpool_recovery_pitr", owner = "root",
+        group = "root", mode = 755, content = file("postgresql/pgpool_recovery_pitr"))
+    
+    remoteStart = std::File(host = host, path = "{{ datadir }}/pgpool_remote_start", owner = "root",
+        group = "root", mode = 755, content = file("postgresql/pgpool_remote_start"))        
     
     accessFileNode = std::File(host = host, path = "/var/lib/pgsql/data/pg_hba.conf", 
                                requires = pkgNode, content = template("postgresql/pg_hba.conf.tmpl"), 

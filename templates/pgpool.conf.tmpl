@@ -336,13 +336,13 @@ system_db_password = ''
 # HEALTH CHECK
 #------------------------------------------------------------------------------
 
-health_check_period = 0
+health_check_period = 300
                                    # Health check period
                                    # Disabled (0) by default
 health_check_timeout = 20
                                    # Health check timeout
                                    # 0 means no timeout
-health_check_user = 'nobody'
+health_check_user = 'root'
                                    # Health check user
 health_check_password = ''
                                    # This parameter is not yet implemented.
@@ -391,13 +391,13 @@ fail_over_on_backend_error = on
 # ONLINE RECOVERY
 #------------------------------------------------------------------------------
 
-recovery_user = 'nobody'
+recovery_user = 'root'
                                    # Online recovery user
 recovery_password = ''
                                    # Online recovery password
-recovery_1st_stage_command = ''
+recovery_1st_stage_command = 'copy-base-backup'
                                    # Executes a command in first stage
-recovery_2nd_stage_command = ''
+recovery_2nd_stage_command = 'pgpool_recovery_pitr'
                                    # Executes a command in second stage
 recovery_timeout = 90
                                    # Timeout in seconds to wait for the

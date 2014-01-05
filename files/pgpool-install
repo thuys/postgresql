@@ -1,30 +1,31 @@
 #!/bin/sh
-if
 
-mkdir -p /tmp/pgpool
-cd /tmp/pgpool
-
-wget http://www.pgpool.net/download.php?f=pgpool-II-3.3.2.tar.gz
-mv download.php\?f\=pgpool-II-3.3.2.tar.gz pgpool.tar.gz
-tar -xvf pgpool.tar.gz
-rm -f pgpool.tar.gz
-
-cd pgpool-*
-
-./configure
-make
-make install
-
-cd sql/pgpool-recovery
-make
-make install
-psql -f pgpool-recovery.sql template1
-psql -f pgpool-recovery.sql postgres
-psql -f pgpool-recovery.sql root
-cd ../pgpool-regclass
-make
-make install
-psql -f pgpool-regclass.sql template1
-psql -f pgpool-regclass.sql postgres
-psql -f pgpool-recovery.sql root
-rm -f -r /tmp/pgpool
+if [ ! -f "/usr/local/bin/pcp_stop_pgpool" ]; then
+	mkdir -p /tmp/pgpool
+	cd /tmp/pgpool
+	
+	wget http://www.pgpool.net/download.php?f=pgpool-II-3.3.2.tar.gz
+	mv download.php\?f\=pgpool-II-3.3.2.tar.gz pgpool.tar.gz
+	tar -xvf pgpool.tar.gz
+	rm -f pgpool.tar.gz
+	
+	cd pgpool-*
+	
+	./configure
+	make
+	make install
+	
+	cd sql/pgpool-recovery
+	make
+	make install
+	psql -f pgpool-recovery.sql template1
+	psql -f pgpool-recovery.sql postgres
+	psql -f pgpool-recovery.sql root
+	cd ../pgpool-regclass
+	make
+	make install
+	psql -f pgpool-regclass.sql template1
+	psql -f pgpool-regclass.sql postgres
+	psql -f pgpool-recovery.sql root
+	rm -f -r /tmp/pgpool
+fi
