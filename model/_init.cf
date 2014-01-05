@@ -78,7 +78,7 @@ implementation pgpoolNodeImpl:
     pgPoolScriptFile = std::File(host = host, path = "/usr/bin/pgpool-install", owner = "root", group = "root",
         mode = 755, content = file("postgresql/pgpool-install"))
     
-    pgPoolService = std::Service(host = host, name = "postgresql_create_root", state = "running", onboot = true, requires = [pgPoolServiceFile, pgPoolScriptFile, rootService])
+    pgPoolService = std::Service(host = host, name = "pgpool-install", state = "running", onboot = true, requires = [pgPoolServiceFile, pgPoolScriptFile, rootService])
     pgPoolService.requires = std::Service[host = host, name = "postgresql"]
     
     

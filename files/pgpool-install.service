@@ -1,5 +1,5 @@
 [Unit]
-Description=Create the root user
+Description=Install pgpool
 
 [Service]
 Type=simple
