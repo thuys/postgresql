@@ -11,6 +11,6 @@ DESTDIR=$2
 PGCTL=/usr/local/pgsql/bin/pg_ctl
 
 # Deploy a base backup
-ssh -T $DEST 'cd {{datadir}}; tar zxf pgsql.tar.gz' 2>/dev/null 1>/dev/null < /dev/null
+ssh -T $DEST 'cd $DESTDIR; tar zxf pgsql.tar.gz' 2>/dev/null 1>/dev/null < /dev/null
 # Startup PostgreSQL server
 ssh -T $DEST 'service postgresql restart' 2>/dev/null 1>/dev/null < /dev/null &
