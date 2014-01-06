@@ -187,9 +187,9 @@ wal_level = archive			# minimal, archive, or hot_standby
 
 # - Archiving -
 
-#archive_mode = off		# allows archiving to be done
+archive_mode = on	# allows archiving to be done
 				# (change requires restart)
-#archive_command = ''		# command to use to archive a logfile segment
+archive_command = 'test ! -f {{ directory }}/pg_archive/%f && cp %p {{ directory }}/pg_archive/%f' 		# command to use to archive a logfile segment
 #archive_timeout = 0		# force a logfile segment switch after this
 				# number of seconds; 0 disables
 
