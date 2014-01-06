@@ -93,7 +93,7 @@ implementation pgpoolNodeImpl:
     
     
     recoveryStage1 = std::File(host = host, path = "{{ datadir }}/copy-base-backup", owner = "root",
-        group = "root", mode = 755, content = file("postgresql/copy-base-backup"))
+        group = "root", mode = 755, content = template("postgresql/copy-base-backup.tmpl"))
     recoveryStage1.requires = std::Service[host = host, name = "postgresql_create"]
 
     recoveryStage2 = std::File(host = host, path = "{{ datadir }}/pgpool_recovery_pitr", owner = "root",
