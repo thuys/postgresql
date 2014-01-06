@@ -97,7 +97,7 @@ implementation pgpoolNodeImpl:
     recoveryStage1.requires = std::Service[host = host, name = "postgresql_create"]
 
     recoveryStage2 = std::File(host = host, path = "{{ datadir }}/pgpool_recovery_pitr", owner = "root",
-        group = "root", mode = 755, content = file("postgresql/pgpool_recovery_pitr"))
+        group = "root", mode = 755, content = template("postgresql/pgpool_recovery_pitr.tmpl"))
     recoveryStage2.requires = std::Service[host = host, name = "postgresql_create"]
     
     remoteStart = std::File(host = host, path = "{{ datadir }}/pgpool_remote_start", owner = "root",

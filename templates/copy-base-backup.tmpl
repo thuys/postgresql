@@ -3,12 +3,8 @@ DATA=$1
 RECOVERY_TARGET=$2
 RECOVERY_DATA=$3
 
-rm -r -f /data/archive_log
-mkdir -p /data/archive_log
-
 psql -c "select pg_start_backup('pgpool-recovery')" postgres
-echo "restore_command = 'scp {{ host.name }}:/data/archive_log/%f %p'" > /data/recovery.conf
-cp -f {{ datadir }}/pg_archive/* /data/archive_log/
-tar -C /data -zcf pgsql.tar.gz pgsql
+echo "restore_command = 'scp {{ host.name }}:{{ datadir }}/%f %p'" > {{ datadir }}/recovery.conf
+tar -C {{ datadir }} -zcf pgsql.tar.gz pgsql
 psql -c 'select pg_stop_backup()' postgres
 scp pgsql.tar.gz $RECOVERY_TARGET:$RECOVERY_DATA
