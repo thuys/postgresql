@@ -108,6 +108,9 @@ implementation pgpoolNodeImpl:
     accessFileNode = std::File(host = host, path = "{{ datadir }}/pg_hba.conf", content = template("postgresql/pg_hba.conf.tmpl"), 
                                owner="postgres", group="postgres", mode = 755, reload = true)
     accessFileNode.requires = std::Service[host = host, name = "postgresql_create"]
+    
+    directory = std::Directory(host = host, path="/data", owner = "postgres", group = "postgres", mode = 755, reload = true)
+
 end
 
 implementation pgpoolMainImpl:
