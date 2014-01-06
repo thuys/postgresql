@@ -12,4 +12,4 @@ DESTDIR=$2
 # Deploy a base backup
 echo "cd $DESTDIR; tar zxf pgsql.tar.gz" | ssh $DEST
 # Startup PostgreSQL server
-echo "service postgresql restart" | ssh $DEST
+echo "service postgresql restart" | ssh root@$DEST
