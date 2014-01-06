@@ -5,6 +5,6 @@ RECOVERY_DATA=$3
 
 psql -c "select pg_start_backup('pgpool-recovery')" postgres
 echo "restore_command = 'scp {{ host.name }}:{{ datadir }}/%f %p'" > {{ datadir }}/recovery.conf
-tar -C {{ datadir }} -zcf pgsql.tar.gz pgsql
+tar -C {{ datadir }} -zcf pgsql.tar.gz base global pg_archive pg_multixact pg_subtrans pg_clog pg_xlog pg_twophase pg_tblspc recovery.conf
 psql -c 'select pg_stop_backup()' postgres
 scp pgsql.tar.gz $RECOVERY_TARGET:$RECOVERY_DATA
