@@ -10,6 +10,6 @@ DEST=$1
 DESTDIR=$2
 
 # Deploy a base backup
-echo "cd $DESTDIR; tar zxf pgsql.tar.gz" | ssh $DEST
+echo "cd $DESTDIR; rm -f -r pg_archive pg_multixact pg_subtrans pg_clog pg_xlog pg_twophase pg_tblspc; tar zxf pgsql.tar.gz --verbose; rm -f pgsql.tar.gz" | ssh $DEST >> /var/log/pgpool_remote.log
 # Startup PostgreSQL server
-echo "service postgresql restart" | ssh root@$DEST
+echo "service postgresql restart" | ssh root@$DEST >> /var/log/pgpool_remote.log
