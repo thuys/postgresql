@@ -142,15 +142,15 @@ implementation pgpoolMainImpl:
     pgPoolService.requires = std::File[host = host, path = "/usr/bin/main-pgpool-install"]
     
     configFileMain = std::ConfigFile(host = host, path = "/usr/local/etc/pgpool.conf", 
-                                     requires = pkgMain, content = template("postgresql/pgpool.conf.tmpl"), reload = true)
+                                     requires = pgPoolService, content = template("postgresql/pgpool.conf.tmpl"), reload = true)
     
     pcpFileMain = std::ConfigFile(host = host, path = "/usr/local/etc/pcp.conf", 
-                                  requires = pkgMain, content = template("postgresql/pcp.conf.tmpl"), reload = true)
+                                  requires = pgPoolService, content = template("postgresql/pcp.conf.tmpl"), reload = true)
     
     directory = std::Directory(host = host, path="/var/run/pgpool", owner = "root", group = "root", mode = 755, reload = true)
     
     serviceMain = std::File(host = host, path = "/lib/systemd/system/pgpool.service", owner = "root",
         group = "root", mode = 755, content = file("postgresql/pgpool.service"))
     svcMain = std::Service(host = host, name = "pgpool", state = "running", onboot = true)
-    svcMain.requires = [pkgMain, configFileMain, pcpFileMain, directory, serviceMain]
+    svcMain.requires = [pgPoolService, configFileMain, pcpFileMain, directory, serviceMain]
 end
