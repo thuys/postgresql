@@ -151,6 +151,8 @@ implementation pgpoolMainImpl:
     
     serviceMain = std::File(host = host, path = "/lib/systemd/system/pgpool.service", owner = "root",
         group = "root", mode = 755, content = file("postgresql/pgpool.service"))
+    envFile = std::File(host = host, path = "/etc/sysconfig/pgpool", owner = "root",
+        group = "root", mode = 755, content = file("postgresql/pgpoolenv"))
     svcMain = std::Service(host = host, name = "pgpool", state = "running", onboot = true)
-    svcMain.requires = [pgPoolService, configFileMain, pcpFileMain, directory, serviceMain]
+    svcMain.requires = [pgPoolService, configFileMain, pcpFileMain, directory, serviceMain, envFile]
 end
