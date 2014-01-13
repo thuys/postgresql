@@ -26,14 +26,25 @@ Pgpool pgPool [1] -- [0:1] PgpoolMain main"""
 implement PostgresqlBasic using postgresBasic
 implement PostgresqlServer using postgresImpl
 
-implement PgpoolNode using postgresImpl, pgpoolNodeImpl
+implement PgpoolNode using postgresImpl, pgpoolNodeImpl, PgpoolCommon
 
-implement PgpoolMain using pgpoolMainImpl
+implement PgpoolMain using pgpoolMainImpl, PgpoolCommon
 
 implementation postgresBasic:
     pkg = std::Package(host = host, name = "postgresql", state = "installed")
 end 
 
+implementation PgpoolCommon:
+    tar = std::Package( host = host, name = "tar", state = "installed")
+    gcc = std::Package( host = host, name = "gcc", state = "installed")
+    wget = std::Package( host = host, name = "wget", state = "installed")
+    postgresql-devel = std::Package( host = host, name = "postgresql-devel", state = "installed")
+    make = std::Package( host = host, name = "make", state = "installed")
+    
+    mainFile = std::File(host = host, path = "/usr/bin/main-pgpool-install", owner = "root", group = "root",
+        mode = 755, content = file("postgresql/main-pgpool-install"))
+    
+end
 implementation postgresImpl:
     
     pkg = std::Package(host = host, name = "postgresql-server", state = "installed")
@@ -64,11 +75,11 @@ implementation postgresImpl:
 end
 
 implementation pgpoolNodeImpl:    
-    tar = std::Package( host = host, name = "tar", state = "installed")
-    gcc = std::Package( host = host, name = "gcc", state = "installed")
-    wget = std::Package( host = host, name = "wget", state = "installed")
-    postgresql-devel = std::Package( host = host, name = "postgresql-devel", state = "installed")
-    make = std::Package( host = host, name = "make", state = "installed")
+    tar = std::Package[ host = host, name = "tar"]
+    gcc = std::Package[ host = host, name = "gcc"]
+    wget = std::Package[host = host, name = "wget"]
+    postgresql-devel = std::Package[host = host, name = "postgresql-devel"]
+    make = std::Package[host = host, name = "make"]
     
     rootServiceFile = std::File(host = host, path = "/lib/systemd/system/postgresql_create_root.service", owner = "root",
         group = "root", mode = 755, content = file("postgresql/postgresql_create_root.service"))
@@ -81,16 +92,17 @@ implementation pgpoolNodeImpl:
     rootService.requires = std::Service[host = host, name = "postgresql"]
     
     
-    pgPoolServiceFile = std::File(host = host, path = "/lib/systemd/system/pgpool-install.service", owner = "root",
-        group = "root", mode = 755, content = file("postgresql/pgpool-install.service"))
+    pgPoolServiceFile = std::File(host = host, path = "/lib/systemd/system/postgres-pgpool-install.service", owner = "root",
+        group = "root", mode = 755, content = file("postgresql/postgres-pgpool-install.service"))
 
-    pgPoolScriptFile = std::File(host = host, path = "/usr/bin/pgpool-install", owner = "root", group = "root",
-        mode = 755, content = file("postgresql/pgpool-install"))
+    pgPoolScriptFile = std::File(host = host, path = "/usr/bin/postgres-pgpool-install", owner = "root", group = "root",
+        mode = 755, content = file("postgresql/postgres-pgpool-install"))
     
-    pgPoolService = std::Service(host = host, name = "pgpool-install", state = "running", onboot = true, 
-                                 requires = [pgPoolServiceFile, pgPoolScriptFile, rootService])
+    
+    pgPoolService = std::Service(host = host, name = "postgres-pgpool-install", state = "running", onboot = true, 
+                                 requires = [pgPoolServiceFile, pgPoolScriptFile, rootService, tar, gcc, wget, postgresql-devel, make])
     pgPoolService.requires = std::Service[host = host, name = "postgresql"]
-    
+    pgPoolService.requires = std::File[host = host, path = "/usr/bin/main-pgpool-install"]
     
     recoveryStage1 = std::File(host = host, path = "{{ datadir }}/copy-base-backup", owner = "root",
         group = "root", mode = 755, content = template("postgresql/copy-base-backup.tmpl"))
@@ -113,17 +125,33 @@ implementation pgpoolNodeImpl:
 end
 
 implementation pgpoolMainImpl:
+    tar = std::Package[ host = host, name = "tar"]
+    gcc = std::Package[ host = host, name = "gcc"]
+    wget = std::Package[host = host, name = "wget"]
+    postgresql-devel = std::Package[host = host, name = "postgresql-devel"]
+    make = std::Package[host = host, name = "make"]
     pkg = std::Package(host = host, name = "postgresql-server", state = "installed")
     
-    pkgMain = std::Package( host = host, name = "postgresql-pgpool-II", state = "installed", requires=pkg)
-    configFileMain = std::ConfigFile(host = host, path = "/etc/pgpool-II/pgpool.conf", 
+    pgPoolServiceFile = std::File(host = host, path = "/lib/systemd/system/main-pgpool-install.service", owner = "root",
+        group = "root", mode = 755, content = file("postgresql/main-pgpool-install.service"))
+
+    
+    
+    pgPoolService = std::Service(host = host, name = "main-pgpool-install", state = "running", onboot = true, 
+                                 requires = [pgPoolServiceFile, tar, gcc, wget, postgresql-devel, make])
+    pgPoolService.requires = std::Service[host = host, name = "postgresql"]
+    pgPoolService.requires = std::File[host = host, path = "/usr/bin/main-pgpool-install"]
+    
+    configFileMain = std::ConfigFile(host = host, path = "/usr/local/etc/pgpool.conf", 
                                      requires = pkgMain, content = template("postgresql/pgpool.conf.tmpl"), reload = true)
     
-    pcpFileMain = std::ConfigFile(host = host, path = "/etc/pgpool-II/pcp.conf", 
+    pcpFileMain = std::ConfigFile(host = host, path = "/usr/local/etc/pcp.conf", 
                                   requires = pkgMain, content = template("postgresql/pcp.conf.tmpl"), reload = true)
     
     directory = std::Directory(host = host, path="/var/run/pgpool", owner = "root", group = "root", mode = 755, reload = true)
     
+    serviceMain = td::File(host = host, path = "/lib/systemd/system/pgpool.service", owner = "root",
+        group = "root", mode = 755, content = file("postgresql/pgpool.service"))
     svcMain = std::Service(host = host, name = "pgpool", state = "running", onboot = true)
-    svcMain.requires = [pkgMain, configFileMain, pcpFileMain, directory]
+    svcMain.requires = [pkgMain, configFileMain, pcpFileMain, directory, serviceMain]
 end

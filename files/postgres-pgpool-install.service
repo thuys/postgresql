@@ -1,0 +1,11 @@
+[Unit]
+Description=Install pgpool
+
+[Service]
+Type=simple
+User=root
+
+ExecStart=/usr/bin/postgres-pgpool-install
+
+[Install]
+WantedBy=multi-user.target

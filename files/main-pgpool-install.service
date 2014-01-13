@@ -5,7 +5,7 @@ Description=Install pgpool
 Type=simple
 User=root
 
-ExecStart=/usr/bin/pgpool-install
+ExecStart=/usr/bin/main-pgpool-install
 
 [Install]
 WantedBy=multi-user.target
