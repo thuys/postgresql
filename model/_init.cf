@@ -138,8 +138,7 @@ implementation pgpoolMainImpl:
     
     
     pgPoolService = std::Service(host = host, name = "main-pgpool-install", state = "running", onboot = true, 
-                                 requires = [pgPoolServiceFile, tar, gcc, wget, postgresql-devel, make])
-    pgPoolService.requires = std::Service[host = host, name = "postgresql"]
+                                 requires = [pgPoolServiceFile, tar, gcc, wget, postgresql-devel, make, pkg])
     pgPoolService.requires = std::File[host = host, path = "/usr/bin/main-pgpool-install"]
     
     configFileMain = std::ConfigFile(host = host, path = "/usr/local/etc/pgpool.conf", 
