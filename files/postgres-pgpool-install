@@ -3,7 +3,7 @@
 if [ ! -f "/usr/local/bin/pcp_stop_pgpool" ]; then
 	/usr/bin/main-pgpool-install
 	
-	cd sql/pgpool-recovery
+	cd /tmp/pgpool/pgp*/sql/pgpool-recovery
 	make
 	make install
 	psql -f pgpool-recovery.sql template1
@@ -14,6 +14,6 @@ if [ ! -f "/usr/local/bin/pcp_stop_pgpool" ]; then
 	make install
 	psql -f pgpool-regclass.sql template1
 	psql -f pgpool-regclass.sql postgres
-	psql -f pgpool-recovery.sql root
+	psql -f pgpool-regclass.sql root
 	rm -f -r /tmp/pgpool
 fi
