@@ -70,8 +70,8 @@ implementation postgresImpl:
                            reload = true, owner="postgres", group="postgres", mode = 755)
 
 
-    svc = std::Service(host = host, name = "postgresql", state = "running", onboot = true, reload = true)
-    svc.requires = std::File[host = host, path = "{{ datadir }}/pg_hba.conf"]
+    svc = std::Service(host = host, name = "postgresql", state = "running", onboot = true)
+    svc.requires = std::File[host = host, path = "{{ datadir }}/pg_hba.conf", reload = true]
 	svc.requires = createService
 	svc.requires = configFile
 	svc.requires = serviceFile
