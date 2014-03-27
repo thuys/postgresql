@@ -158,4 +158,5 @@ implementation pgpoolMainImpl:
         group = "root", mode = 755, content = file("postgresql/pgpoolenv"))
     svcMain = std::Service(host = host, name = "pgpool", state = "running", onboot = true)
     svcMain.requires = [pgPoolService, configFileMain, pcpFileMain, directory, serviceMain, envFile]
+    svcMain.requires = std::File[host = host, path="/etc/hosts"]
 end
