@@ -37,7 +37,7 @@ Group=postgres
 Environment=PGPORT={{ port }}
 
 # Location of database directory
-Environment=PGDATA=/var/lib/pgsql/data
+Environment=PGDATA={{datadir}}
 
 # Where to send early-startup messages from the server (before the logging
 # options of postgresql.conf take effect)

@@ -54,7 +54,7 @@ implementation postgresImpl:
         group = "root", mode = 755, requires = script_file, content = file("postgresql/postgresql_create.service"))
 
     script_file = std::File(host = host, path = "/usr/bin/postgresql_create", owner = "root", group = "root",
-        mode = 755, content = file("postgresql/postgresql_create"))
+        mode = 755, content = template("postgresql/postgresql_create.tmpl"))
     
     createService = std::Service(host = host, name = "postgresql_create", state = "running", onboot = true,
         requires = [pkg, createServiceFile, script_file])

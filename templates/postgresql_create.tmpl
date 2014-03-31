@@ -1,12 +1,12 @@
 #!/bin/sh
 
 # function to "declare" the database that exist
-if [[ -n $(postgresql-check-db-dir /var/lib/pgsql/data) ]]; then
+if [[ -n $(postgresql-check-db-dir {{datadir}}) ]]; then
 	echo "Need to initialize"
-	rm -r -f /var/lib/pgsql/data
+	rm -r -f {{datadir}}
     chkconfig postgresql on
-	/usr/bin/postgresql-setup initdb
-	if [[ -n $(postgresql-check-db-dir /var/lib/pgsql/data) ]]; then
+	/usr/bin/postgresql-setup initdb -D {{datadir}}
+	if [[ -n $(postgresql-check-db-dir {{datadir}}) ]]; then
 		if [[ "$#" == *"0"* ]];then
 			sleep 1 m
 			/usr/bin/postgresql_create 1
