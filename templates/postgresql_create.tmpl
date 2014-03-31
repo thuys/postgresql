@@ -5,7 +5,7 @@ if [[ -n $(postgresql-check-db-dir {{datadir}}) ]]; then
 	echo "Need to initialize"
 	rm -r -f {{datadir}}
     chkconfig postgresql on
-	/usr/bin/postgresql-setup initdb -D {{datadir}}
+	/usr/bin/postgresql-setup initdb
 	if [[ -n $(postgresql-check-db-dir {{datadir}}) ]]; then
 		if [[ "$#" == *"0"* ]];then
 			sleep 1 m
